@@ -4,7 +4,7 @@ title:      "Kubernetes 网络"
 subtitle:   "proxy,cni"
 date:       2021-09-27
 author:     "xie233"
-header-img: "img/etcd-horizontal-color.svg"
+header-img: "img/about-bg-walle.jpg"
 tags:
     - Kubernetes
     - Go
@@ -86,6 +86,21 @@ TCP  10.96.0.10:53 rr
 
 
 
+
+## DNS
+
+CoreDNS
+
+kubernetes 中的服务发现，使用自定义的域名格式定位到具体的pod或者service，
+
+- Headless Service：无头服务，就是把 clusterIP 设置为 None 的，会被解析为指定 Pod 的 IP 列表，同样还可以通过 `podname.servicename.namespace.svc.cluster.local` 访问到具体的某一个 Pod。
+
+Pod默认的域名解析器为kube-system中的coredns，具体地，查看某个pod下的resolv.conf文件，可以看到域名解析地址为10.96.0.10，其对应的就是coredns的clusterip
+
+``[root@rpc-75d9b7d7c9-2zzrx rpc-release]# cat /etc/resolv.conf
+nameserver 10.96.0.10
+search default.svc.cluster.local svc.cluster.local cluster.local
+options ndots:5``
 
 
 
