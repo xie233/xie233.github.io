@@ -49,6 +49,8 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 
 ### kube-proxy
 
+k8s中的pod，可能经常创建和销毁，ip也会随之变化，而service 对应的ClusterIP不会因为Pod状态改变而变，是个虚拟ip，存在于iptables或者ipvs生成路由规则中。
+
 kube-proxy's 主要是将 Cluster IP 重定向到 Pod IP， 起到负载均衡的作用。kube-proxy 两种模式`IPVS` and `iptables`.  （user-namespace 弃用), 比如使用ipvs ,  ipvsadm 命令会出现如下重定向规则:
 
 ```yaml
@@ -67,6 +69,33 @@ TCP  10.96.0.10:53 rr
 ```
 
 默认的CoreDNS  Cluster IP  是`10.96.0.10`,其背后对应两个pod，  Pod IP为 `10.244.0.137` and `10.244.0.138`.
+
+上面显示的是rr负载策略，还有以下可以选择： 
+
+- rr: round-robin
+- lc: least connection (smallest number of open connections)
+- dh: destination hashing
+- sh: source hashing
+- sed: shortest expected delay
+- nq: never queue
+
+若想让客户端每次连接相同的pod， 而不是轮询的方式，可设置 service.spec.sessionAffinity` 设置为 `ClientIP，
+
+<u>其原理为在iptables添加一条recent记录，同时在原先的路由规则中添加-m:recent 表示使用这条记录；</u>
+
+
+
+
+
+
+
+参考链接：
+
+[sessionAfinity](https://www.hwchiu.com/kubernetes-service-iiii.html)
+
+[cni vs kube-proxy](https://stackoverflow.com/questions/53534553/kubernetes-cni-vs-kube-proxy)
+
+
 
 
 
