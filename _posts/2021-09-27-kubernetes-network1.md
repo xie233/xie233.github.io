@@ -81,7 +81,7 @@ TCP  10.96.0.10:53 rr
 
 若想让客户端每次连接相同的pod， 而不是轮询的方式，可设置 service.spec.sessionAffinity` 设置为 `ClientIP，
 
-<u>其原理为在iptables添加一条recent记录，同时在原先的路由规则中添加-m:recent 表示使用这条记录；</u>
+**<u>其原理为在iptables添加一条recent记录，同时在原先的路由规则中添加-m:recent 表示使用这条记录；</u>**
 
 
 
@@ -97,18 +97,18 @@ kubernetes 中的服务发现，使用自定义的域名格式定位到具体的
 
 Pod默认的域名解析器为kube-system中的coredns，具体地，查看某个pod下的resolv.conf文件，可以看到域名解析地址为10.96.0.10，其对应的就是coredns的clusterip
 
-``[root@rpc-75d9b7d7c9-2zzrx rpc-release]# cat /etc/resolv.conf
-nameserver 10.96.0.10
-search default.svc.cluster.local svc.cluster.local cluster.local
-options ndots:5``
+`[root@rpc-75d9b7d7c9-2zzrx rpc-release]# cat /etc/resolv.conf`
+`nameserver 10.96.0.10`
+`search default.svc.cluster.local svc.cluster.local cluster.local`
+`options ndots:5`
 
 
 
 参考链接：
 
-[sessionAfinity](https://www.hwchiu.com/kubernetes-service-iiii.html)
-
-[cni vs kube-proxy](https://stackoverflow.com/questions/53534553/kubernetes-cni-vs-kube-proxy)
+- [sessionAfinity](https://www.hwchiu.com/kubernetes-service-iiii.html)
+- [cni vs kube-proxy](https://stackoverflow.com/questions/53534553/kubernetes-cni-vs-kube-proxy)
+- [kube-proxy实现原理](https://cloudnative.to/blog/k8s-node-proxy/)
 
 
 
