@@ -19,8 +19,6 @@ tags:
 
 ## CNI 和 kube-proxy 区别
 
-
-
 ### CNI
 
 分为overlay网络和underlay网络，目的是集群中的pod可以相互连通，CNI 关注 Pod ip， 在pod被调度到特定节点后，分配pod ip，同时创建虚拟设备，使集群的每个节点都能访问。Calico是其实现方式之一，
